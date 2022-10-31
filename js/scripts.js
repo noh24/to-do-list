@@ -1,14 +1,5 @@
-// Make a to do list page where people can add tasks to create a list of things to do.
-
-// Add an option for users to indicate a task is done.
-// Allow users to remove a task from the list.
-// Use test-driven development to write your business logic, and include the tests in your README.md. After every passing test, make sure to commit your code.
-
 // Co-authored-by: Anton Ch <anton3ch@icloud.com>"
-
 //Business
-
-//object list
 function ToDoList() {
   this.tasks = {};
   this.currentId = 0;
@@ -32,15 +23,38 @@ ToDoList.prototype.deleteTask = function(id) {
   delete this.tasks[id];
   return "Successfully deleted task: " + taskDescription;
 }
-//object task
-function Task(description, status) {
+
+function Task(description) {
   this.description = description; 
-  this.status = status;
+  this.status = false;
 }
 
+let toDoList = new ToDoList();
 
 //UI
 
 
+const form = document.getElementById("form");
 
-
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  const taskDescription = document.getElementById("task-description").value;
+  
+  let task = new Task(taskDescription);
+  
+  toDoList.addTask(task);
+  const ul = document.querySelector("ul");
+  let li = document.createElement("li");
+  ul.append(li);
+  li.innerText = toDoList.tasks[task.id].description;
+  let button = document.createElement("button");
+  button.setAttribute("class", "btn btn-secondary float-right");
+  button.innerText = "delete";
+  li.append(button);
+  button.addEventListener("click", function() {
+    if (toDoList.deleteTask(1)) {
+      delete document.querySelector(li);
+    };
+  });
+  // document.querySelector("input[name=task-description]") = null;
+});

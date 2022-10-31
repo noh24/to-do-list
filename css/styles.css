@@ -1,0 +1,25 @@
+html {
+  height: 100%;
+}
+
+body {
+  background: rgb(34,193,195);
+  background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+  background-repeat: no-repeat;
+  width: 100%;
+  background-attachment: fixed;
+  margin-top: 20px; 
+  padding-bottom: 10px;
+}
+
+.jumbotron {
+  border: 2px solid;
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,0.4713060224089635) 0%, rgba(255,255,255,0.4573004201680672) 100%);
+  min-height: 1000px;
+}
+
+li {
+  border: 2px solid;
+  list-style: none;
+}
