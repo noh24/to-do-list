@@ -20,6 +20,9 @@ body {
 }
 
 li {
-  border: 2px solid;
   list-style: none;
+}
+
+.hidden {
+  display: none;
 }
