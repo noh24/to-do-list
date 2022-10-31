@@ -22,39 +22,65 @@ ToDoList.prototype.deleteTask = function(id) {
   let taskDescription =  this.tasks[id].description;
   delete this.tasks[id];
   return "Successfully deleted task: " + taskDescription;
-}
+};
 
-function Task(description) {
+ToDoList.prototype.findTask = function(id) {
+  if (this.tasks[id] !== undefined) {
+    return this.tasks[id];
+  }
+  return false;
+};
+
+function Task(name, description) {
+  this.name = name;
   this.description = description; 
-  this.status = false;
 }
 
-let toDoList = new ToDoList();
+
 
 //UI
 
+let toDoList = new ToDoList();
 
-const form = document.getElementById("form");
-
-form.addEventListener("submit", function(event) {
-  event.preventDefault();
-  const taskDescription = document.getElementById("task-description").value;
-  
-  let task = new Task(taskDescription);
-  
-  toDoList.addTask(task);
-  const ul = document.querySelector("ul");
-  let li = document.createElement("li");
-  ul.append(li);
-  li.innerText = toDoList.tasks[task.id].description;
-  let button = document.createElement("button");
-  button.setAttribute("class", "btn btn-secondary float-right");
-  button.innerText = "delete";
-  li.append(button);
-  button.addEventListener("click", function() {
-    if (toDoList.deleteTask(1)) {
-      delete document.querySelector(li);
-    };
+function listTasks(toDoListToDisplay) {
+  const toDoListDiv = document.querySelector("div#to-do-list");
+  toDoListDiv.innerText = null;
+  const ul = document.createElement("ul");
+  Object.keys(toDoListToDisplay.tasks).forEach(function(property) {
+    const task = toDoListToDisplay.findTask(property);
+    const li = document.createElement("li");
+    li.append(task.name);
+    li.setAttribute("id", task.id)
+    ul.append(li);
   });
-  // document.querySelector("input[name=task-description]") = null;
-});
+  toDoListDiv.append(ul);
+}
+
+function showTaskDescription(event) {
+  const task = toDoList.findTask(event.target.id);
+  document.getElementById("output-description").innerText = task.name + ": " + task.description;
+  document.querySelector("div#output").removeAttribute("class");
+  document.querySelector("button.delete").setAttribute("id", event.target.id);
+}
+
+function handleDelete(event) {
+  toDoList.deleteTask(event.target.id);
+  document.querySelector("div#output").setAttribute("class", "hidden");
+  document.querySelector("button.delete").removeAttribute("id");
+  listTasks(toDoList);
+}
+
+function handleSubmission(event) {
+  event.preventDefault();
+  const inputtedTaskName = document.getElementById("task-name").value;
+  const inputtedTaskDescription = document.getElementById("task-description").value;
+  const newTask = new Task(inputtedTaskName, inputtedTaskDescription);
+  toDoList.addTask(newTask);
+  listTasks(toDoList);
+  document.getElementById("task-name").value = null;
+  document.getElementById("task-description").value = null;
+}
+
+document.getElementById("form").addEventListener("submit", handleSubmission);
+document.getElementById("to-do-list").addEventListener("click", showTaskDescription);
+document.querySelector("button.delete").addEventListener("click", handleDelete);
